@@ -323,6 +323,8 @@ class Player extends Component {
     // Turn off API access because we're loading a new tech that might load asynchronously
     this.isReady_ = false;
 
+    this.lastTimeClick_ = 0;
+
     // Init state hasStarted_
     this.hasStarted_ = false;
 
@@ -1878,7 +1880,14 @@ class Player extends Component {
    *         situations, this will return `undefined`.
    */
   play() {
+    let nowTimeClick = 0;
 
+    nowTimeClick = new Date().getTime();
+    if (Math.abs(nowTimeClick - this.lastTimeClick_) <= 200) {
+      this.lastTimeClick_ = nowTimeClick;
+      return;
+    }
+    this.lastTimeClick_ = nowTimeClick;
     // If this is called while we have a play queued up on a loadstart, remove
     // that listener to avoid getting in a potentially bad state.
     if (this.playOnLoadstart_) {
@@ -1929,6 +1938,14 @@ class Player extends Component {
    *         A reference to the player object this function was called on
    */
   pause() {
+    let nowTimeClick = 0;
+
+    nowTimeClick = new Date().getTime();
+    if (Math.abs(nowTimeClick - this.lastTimeClick_) <= 200) {
+      this.lastTimeClick_ = nowTimeClick;
+      return;
+    }
+    this.lastTimeClick_ = nowTimeClick;
     this.techCall_('pause');
   }
 
